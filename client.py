@@ -10,7 +10,7 @@ def receive_messages(client_socket):
             message = client_socket.recv(1024).decode('utf-8')
             if not message:
                 break
-            print(f"\r{message}\nYou: ", end="")
+            print(f"\r{message}\nReceived from server: ", end="")
         except:
             break
 
@@ -31,16 +31,18 @@ def main():
     print("Connected to server. Type your messages (type 'quit' to exit):")
     
     while True:
-        message = input("You: ")
+        signal = input("Type 0 or 1 : ")
         
-        if message.lower() == 'quit':
+        if signal.lower() == 'quit':
             break
             
         try:
-            client.send(message.encode('utf-8'))
+            header = 0
+            message = bytes([header, signal])
+            client.send(message)
         except:
             break
-    
+        
     client.close()
     
 main()
